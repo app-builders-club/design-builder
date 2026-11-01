@@ -1,8 +1,9 @@
 ---
-description: Strict design critique — composition, typography, color, accessibility, AI-slop, anti-patterns. Delegates to design-auditor agent. Writes report to design/reviews/.
+description: Strict design critique — composition, typography, color, accessibility, AI-slop, anti-patterns. Uses the shared audit workflow. Writes report to design/reviews/.
 argument-hint: "[target — file path, directory, Figma URL, http(s) URL, 'screenshots', or empty for project-wide]"
-allowed-tools: Task, Read, Glob, Grep, Bash, Write, mcp__plugin_figma_figma__get_design_context, mcp__plugin_figma_figma__get_screenshot, mcp__plugin_figma_figma__get_metadata
 ---
+
+Read [host compatibility](../references/host-compatibility.md) before executing this workflow.
 
 # /design-builder:review — strict design critique
 
@@ -22,14 +23,14 @@ Parse the argument:
 
 Capture the chosen mode for the report.
 
-## Phase 2 — Delegate to design-auditor
+## Phase 2 — Run the shared audit
 
 Before dispatching, read the project's three foundation files so the auditor has correct context:
 - `design/design-system.md` — design intent, direction, token decisions
 - `design/style-guide.md` — typography scale, color palette, spacing, accessibility floor (contrast table)
 - `design/content-library.md` — voice & tone principles, copy patterns
 
-Use the `Task` tool to invoke the `design-auditor` sub-agent (see `agents/design-auditor.md`). Pass:
+Read `skills/design/references/audit-workflow.md` and execute it inline. If the host supports and permits delegation, you may use its agent tool with Claude's `design-auditor` adapter instead. Inputs:
 - `project_path` — the resolved target root
 - `platform` — `web` / `ios` / `cross` (infer from project: SwiftUI present → ios; tailwind/React → web; both → cross)
 - `mode` — `visual` / `code_only` / `mixed` (from Phase 1)
@@ -41,7 +42,7 @@ Use the `Task` tool to invoke the `design-auditor` sub-agent (see `agents/design
 
 The agent returns a JSON object with `status`, `report_path`, `findings`, `fixable_count`, `mode`, `layer2_checklist`. The agent also writes the full report to `design/reviews/review-YYYY-MM-DD-HHMM.md`.
 
-If the `Task` tool / Agent infrastructure is unavailable for some reason: execute the audit logic inline by reading `agents/design-auditor.md` and following its dimensions, severity rubric, AI-slop detector criteria, and Layer 2 checklist. Output the same shape.
+If the `Task` tool / Agent infrastructure is unavailable for some reason: execute the audit logic inline by reading `skills/design/references/audit-workflow.md` and following its dimensions, severity rubric, AI-slop detector criteria, and Layer 2 checklist. Output the same shape.
 
 ## Phase 3 — Surface results
 

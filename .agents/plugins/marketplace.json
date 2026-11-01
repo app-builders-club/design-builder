@@ -1,0 +1,20 @@
+{
+  "name": "design-builder-marketplace",
+  "interface": {
+    "displayName": "Design Builder"
+  },
+  "plugins": [
+    {
+      "name": "design-builder",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

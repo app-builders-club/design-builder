@@ -1,8 +1,9 @@
 ---
 description: Universal code generator. Reads spec(s) from design/pages/ or design/screens/ and writes code to the project source tree. Single, batch, or glob targets.
 argument-hint: "[target — spec name (e.g. 'landing'), 'all', or glob (e.g. 'pages/onboarding-*'); empty = pick from list]"
-allowed-tools: Read, Glob, Grep, Bash, Write, Edit, mcp__designlib__get_animation
 ---
+
+Read [host compatibility](../references/host-compatibility.md) before executing this workflow.
 
 # /design-builder:build — generate code from spec(s)
 
@@ -36,10 +37,9 @@ Read in order:
 3. `design/style-guide.md` (tokens, contrast rules, motion rules, anti-patterns full prose).
 4. `design/content-library.md` (voice & tone, state patterns).
 
-If `stack.json` says `project_initialized: false`:
-> "Project not initialized. Per `design-system.md ## Stack`, run the scaffold command first (it was suggested in `/setup` Phase 0.4). Re-run `/build` after scaffolding."
+If `stack.json` says `project_initialized: false`, inspect actual project files: the cache may be stale. If initialization is still needed, follow the safe scaffolding rules in setup Phase 0.4 and continue the authorized build.
 
-If foundation files (design-system, style-guide, content-library) are missing → stop and point to `/setup`.
+If foundation files are missing, use the supplied spec, project tokens and brief where sufficient. Create missing foundation artifacts through setup as needed; ask only for unresolved consequential choices, then continue the requested build.
 
 ## Phase 3 — Per-spec build (loop)
 
@@ -90,7 +90,7 @@ Generate the actual code:
 - Walk the spec's `## Sections` in order. For each section, render the composition / elements / slot fills.
 - All colors / typography / spacing reference `tokens.css` variables (web) or SwiftUI Theme (iOS) — no raw hex, no hardcoded font names.
 - Slot markers in the spec (`<slot — verb-led, 2-3 words>`) get filled with project-voice copy from `content-library.md ## Voice & tone` principles.
-- For animations: import vendored components and place them per Phase 4c.5 of v2.0 `/create` (HeroAnimation wraps section content, BackgroundAnim sits absolute behind, MagneticButton replaces plain button, etc.).
+- For animations: import vendored components and place them per the chosen recipe and `skills/motion/SKILL.md` (HeroAnimation wraps section content, BackgroundAnim sits absolute behind, MagneticButton replaces plain button, etc.).
 
 ### 3.4 Apply tokens (mandatory)
 

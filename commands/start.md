@@ -1,8 +1,9 @@
 ---
 description: Alias for /design-builder:setup — establish the project's design foundation.
 argument-hint: ""
-allowed-tools: Read, Glob, Grep, Bash, Write, Edit, mcp__designlib__list_inspiration_pages, mcp__designlib__get_inspiration_page, mcp__designlib__list_inspiration_page_facets, mcp__designlib__list_palettes, mcp__designlib__list_styles, mcp__designlib__list_font_pairs, mcp__designlib__list_domains, mcp__designlib__list_landing_patterns
 ---
+
+Read [host compatibility](../references/host-compatibility.md) before executing this workflow.
 
 # /design-builder:start — alias for /setup
 

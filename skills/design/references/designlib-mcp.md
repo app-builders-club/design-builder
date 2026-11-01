@@ -6,7 +6,7 @@ description: designlib MCP — authoritative catalog of styles, palettes, font p
 # designlib MCP
 
 **Server (hosted):** `https://designlib.app-builders.club/mcp` (HTTP, read-only)
-**Catalog:** 67 styles · 100 palettes · 34 font pairs · 134 domains · 405 inspiration_pages · 120 animations · web + iOS
+**Catalog:** styles, palettes, font pairs, domains, inspiration pages and animations. Discover current availability/counts through live tools; counts are not versioned plugin guarantees.
 
 designlib is a curated, hand-maintained source of truth for design tokens. It replaces LLM guessing (invented hex codes, random font pairings) with retrieval. When available, it is the **primary** source for styles/palettes/fonts/domain recommendations in this skill.
 
@@ -47,6 +47,10 @@ Unknown IDs: `{error_code: "NOT_FOUND", message, field, suggest_tool}`.
 | `list_animation_facets` | — | Valid category/framework/interactivity/complexity/style_tag/placement/use_when/library values |
 | `list_animations` | `category?`, `framework?`, `interactivity?`, `complexity?`, `style_tag?`, `placement?`, `use_when?`, `library?`, `keyword?`, `limit=50`, `offset=0` | Shortlist React component animations (singular filter values per call) |
 | `get_animation` | `animation_id` | Full record incl. verbatim TSX in `prompt_text`, `libraries[]`, `placement[]`, `interactivity` |
+
+## Additional catalog: social templates
+
+Server 4.0.2 exposed 30 tools when checked on 2026-11-01, including `list_social_templates`, `get_social_template(template_id, include_html)` and `list_social_template_facets`. For social-format design tasks discover facets and the live schema first; do not assume these are whole-page web references. Counts and availability can change independently of this plugin.
 
 ## Canonical workflows
 

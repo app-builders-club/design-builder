@@ -1,0 +1,22 @@
+{
+  "name": "design-builder",
+  "version": "2.4.0",
+  "description": "Design systems, web pages, iOS screens, implementation, improvements and audits for Claude Code and Codex. Shared workflows, local design search, motion, browser capture, DesignLib and Figma.",
+  "author": {
+    "name": "App Builders Club"
+  },
+  "homepage": "https://github.com/app-builders-club/design-builder",
+  "repository": "https://github.com/app-builders-club/design-builder",
+  "keywords": [
+    "design",
+    "design-system",
+    "ui",
+    "ux",
+    "web",
+    "ios",
+    "motion",
+    "figma"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

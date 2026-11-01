@@ -1,8 +1,9 @@
 ---
 description: Generate a design spec (markdown) for a web page. Spec lands in design/pages/<name>.md. No code emitted — use /build for that.
 argument-hint: "[what to design — e.g. 'landing', 'pricing', 'about']"
-allowed-tools: Read, Glob, Grep, Bash, Write, Edit, mcp__designlib__list_inspiration_pages, mcp__designlib__get_inspiration_page, mcp__designlib__list_inspiration_page_facets, mcp__designlib__list_landing_patterns, mcp__designlib__get_landing_pattern, mcp__designlib__list_palettes, mcp__designlib__list_styles, mcp__designlib__list_font_pairs, mcp__designlib__list_animations, mcp__designlib__get_animation, mcp__designlib__list_animation_facets, mcp__plugin_design-builder_figma__get_design_context, mcp__plugin_design-builder_figma__get_screenshot
 ---
+
+Read [host compatibility](../references/host-compatibility.md) before executing this workflow.
 
 # /design-builder:design_page — generate a web page spec
 
@@ -66,7 +67,7 @@ Capture all answers to `design/.cache/page-<slug>-interview.json` as JSON:
 
 ## Phase 3 — Reference resolution
 
-Use the same Layer 1 / Layer 2 machinery as the v2.0 `/create` command. The relevant phases are:
+Use the shared Layer 1 resolver and Layer 2 filters from `skills/design/SKILL.md`:
 
 ### 3.1 Map argument → page_type
 
@@ -100,7 +101,7 @@ Call `get_design_reference(type='page', filters={page_type, mood, style_family, 
 
 ### 3.5 Present cards
 
-For each result, render the card format used by v2.0 `/create` Phase 3:
+For each result, render this reference card:
 ```
 ▸ <title>  (id: <id>, source: <designlib_mcp | landing_pattern_fallback>)
   Description: <description>
@@ -125,7 +126,7 @@ For EACH section in `sections[]`:
 
 ### 3.8 Animation lookup (gated)
 
-Same gate as v2.0 `/create` Phase 4c — runs only if all of:
+Run animation lookup only if all of:
 1. Stack is React (`package.json` deps include `react`).
 2. At least one motion signal: `MOTION_INTENSITY >= 6` (from interview, possibly overridden by Phase 2b Q4) OR (`appearance=dark` AND `page_type ∈ {marketing_landing, portfolio, signup}`).
 

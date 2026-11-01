@@ -6,15 +6,15 @@ Usage: python search.py "<query>" [--domain <domain>] [--stack <stack>] [--platf
        python search.py "<query>" --design-system [-p "Project Name"] [--platform web|ios]
        python search.py "<query>" --design-system --persist [-p "Project Name"] [--page "dashboard"]
 
-Domains: style, prompt, color, chart, landing, product, ux, typography, google-fonts
+Domains: style, color, product, ux, typography, google-fonts, react, web
 Stacks: react, nextjs, vue, svelte, astro, swiftui, react-native, flutter, nuxtjs, nuxt-ui, html-tailwind, shadcn, jetpack-compose, threejs
 Platforms: web, ios — informational filter; also tags output for downstream pipelines
 
-Token sourcing priority (Claude consumers: read this):
+Token sourcing priority (all hosts):
   1. Project tokens (existing design system in repo)
   2. designlib MCP (if connected) — preferred for authoritative tokens:
      mcp://designlib/get_domain(domain_id, platform="web"|"ios", top_n=3)
-  3. This CSV search (for UX guidelines, charts, landing patterns, icons — designlib doesn't cover)
+  3. This CSV search (UX guidelines, style/color/typography and stack-specific advice; remote charts, landing patterns and icons are not included)
   4. Free generation (last resort)
 
 Persistence (Master + Overrides pattern):

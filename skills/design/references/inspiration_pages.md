@@ -2,7 +2,8 @@
 
 > What this is: a digestible map of the `inspiration_pages` table that the `designlib` MCP server exposes via `list_inspiration_pages` / `get_inspiration_page` / `list_inspiration_page_facets`. The skill loads this when any command resolves `type='page'` through `get_design_reference()`.
 >
-> 405 records, sourced from land-book screenshots.
+> Catalog content changes independently of this plugin. Fetch live facets and totals.
+> The coverage tables below describe a historical 405-record snapshot, not current availability.
 
 ## When to consult
 
@@ -12,7 +13,7 @@ Load this file when:
 - You need to interpret an MCP response field — e.g. what does `palette.role_intent.primary_accent` mean, or what's in `sections[]`.
 - You're deciding which fields to project into the user-facing description.
 
-## Coverage at a glance (405 rows)
+## Historical coverage snapshot (405 rows)
 
 | page_type           | rows |
 |---------------------|-----:|

@@ -49,6 +49,8 @@ Common shape over all source entities. Commands work with this; they never deal 
 
 ### Pseudocode
 
+This is a workflow illustration, not callable code. Before any MCP step, check that the tool exists and the connection is usable; on absence/auth failure skip ALL remote fallbacks, including landing_patterns, and continue locally. Use the actual tool schema and unwrap MCP structuredContent/text before reading items.
+
 ```
 def get_design_reference(type, filters, limit=3):
     # 1. project tokens — narrow case
@@ -112,14 +114,14 @@ def get_design_reference_multi(type, filters_with_lists, limit=3):
     return list(seen.values())[:limit]
 ```
 
-Use this pattern in `/setup` and `/create` when the user's brief implies more than one mood. Document the de-dup behaviour in the user-facing card.
+Use this pattern in `/setup` and `/design_page` when the user's brief implies more than one mood. Document the de-dup behaviour in the user-facing card.
 
 ## `MCP_TOOL_MAP`
 
 | `type`              | MCP tool                                              | Notes                                              |
 |---------------------|-------------------------------------------------------|----------------------------------------------------|
 | `'page'`            | `mcp__designlib__list_inspiration_pages`              | Plus `mcp__designlib__get_inspiration_page(page_id=...)` for deep-fetch by ID. **Web-only**. |
-| `'animation'`       | `mcp__designlib__list_animations`                     | Plus `mcp__designlib__get_animation(animation_id=...)` for deep-fetch by ID. **Web/React-only** (iOS/Vue/vanilla → resolver returns `[]`, no fallback). 120 records; verbatim TSX in `prompt_text`. See `references/animations.md`. |
+| `'animation'`       | `mcp__designlib__list_animations`                     | Plus `mcp__designlib__get_animation(animation_id=...)` for deep-fetch by ID. **Web/React-only** (iOS/Vue/vanilla → resolver returns `[]`, no fallback). Catalog size changes; verbatim TSX in `prompt_text`. See `references/animations.md`. |
 | `'palette'`         | `mcp__designlib__list_palettes`                       | -                                                  |
 | `'style'`           | `mcp__designlib__list_styles`                         | -                                                  |
 | `'font_pair'`       | `mcp__designlib__list_font_pairs`                     | -                                                  |

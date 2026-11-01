@@ -22,7 +22,7 @@ Then add references based on the brief's needs:
 - Animation or transitions? Consult [motion-design.md](motion-design.md)
 - Color-heavy or themed? Consult [color-and-contrast.md](color-and-contrast.md)
 - Responsive requirements? Consult [responsive-design.md](responsive-design.md)
-- Heavy on copy, labels, or errors? Consult [ux-writing.md](ux-writing.md)
+- Heavy on copy, labels, or errors? Consult [ux-writing.md](../ux-writing.md)
 
 ## Step 3: Build
 

@@ -16,7 +16,7 @@ Loaded by `/design craft`, `/design make`, and `/design refine` whenever `--plat
 | "tweak node 42:15 — move, resize, re-bind variable" | Point-edit (§4) | §2, §3 |
 | "extract the tokens" | Token sync only (§5) | §2, §3, §6 |
 
-If the user gives a Figma URL without context, ask which mode before calling MCP — the first tool call budget matters for Starter/View seats (6 writes/month hard cap). Dev/Full seat: per-minute limit, no pre-call check needed.
+If intent is unclear, clarify the desired output; reuse intent already stated. Read limits depend on plan and seat; do not confuse reads with writes. Check [current Figma access rules](https://developers.figma.com/docs/figma-mcp-server/rate-limits-access/) rather than assuming a fixed quota.
 
 ---
 

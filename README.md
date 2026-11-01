@@ -1,8 +1,8 @@
 # design-builder
 
-**Production-grade UIs from Claude Code — without the AI-slop look.**
+**Production-grade UIs from Claude Code and Codex — without the AI-slop look.**
 
-A design plugin for Claude Code that turns AI-generated UI from "obviously AI" into something you'd actually ship. Real references, layered filters, spec-first workflow.
+A shared design plugin for Claude Code and Codex that turns AI-generated UI from "obviously AI" into something you'd actually ship. Real references, layered filters, spec-first workflow.
 
 → [Quickstart](#quickstart) · [The 6 commands](#the-6-commands) · [How it works](#three-layer-architecture)
 
@@ -31,19 +31,28 @@ The reason isn't model capability. It is missing inputs:
 
 ## What sets it apart
 
-**Real references, not vibes.** 405 `inspiration_pages` sourced from land-book, served via the `designlib` MCP — full pages with palette, typography, sections, mood, and generation prompt. Specs pull from these instead of inventing.
+**Real references, not vibes.** `inspiration_pages` sourced from land-book, served via the `designlib` MCP — full pages with palette, typography, sections, mood, and generation prompt. Specs pull from these instead of inventing.
 
 **Six layered filters.** Every command's output is gated through Direction → Dials → Aesthetics → Anti-Patterns → **Distinctiveness Gate** → Output Rules before emit. The Distinctiveness Gate catches most "looks AI-generated" outputs before they reach code.
 
 **Spec-first.** `/design_page` and `/design_screen` write a markdown design spec. `/build` vendors that spec into source code. The spec is the contract — change the spec, regenerate the code.
 
-**Sub-agent for review.** `/review` delegates to `design-auditor`, which loads a11y / perf / HIG / motion / anti-pattern references, runs WCAG checks, and returns a structured P0-P3 report.
+**Shared audit workflow.** `/review` runs inline or through Claude's `design-auditor` adapter, which loads a11y / perf / HIG / motion / anti-pattern references, runs WCAG checks, and returns a structured P0-P3 report.
 
 ---
 
 ## Quickstart
 
-Install:
+### Claude Code
+
+Install from a local checkout (includes unpublished changes):
+
+```text
+/plugin marketplace add /absolute/path/to/design-builder
+/plugin install design-builder@design-builder-marketplace
+```
+
+Or install the published GitHub version:
 
 ```
 /plugin marketplace add app-builders-club/design-builder
@@ -62,7 +71,33 @@ That is it. The interview produces 2-3 direction candidates, you pick one, and y
 - **iOS screen** → `/design-builder:design_screen <name>` → `/design-builder:build <name>`
 - **Existing surface** → `/design-builder:improve` or `/design-builder:review`
 
-No `npm install` or `pip install` required. Scripts use stdlib only.
+### Codex
+
+```sh
+codex plugin marketplace add /absolute/path/to/design-builder
+codex plugin add design-builder@design-builder-marketplace
+```
+
+Start a new Codex session to refresh available skills, then use:
+
+```text
+$design-builder setup
+$design-builder design_page landing
+$design-builder build landing
+$design-builder review src/
+$design-builder improve src/
+```
+
+The same six workflow files serve both hosts. Claude retains its native commands
+and auditor adapter; Codex can execute the audit inline. The `design`, `motion`,
+`playwright-cli` and `figma-use` knowledge skills remain bundled.
+
+Local Python search, previews and contrast checks use the standard library.
+The Node detector supports dependency-free `--fast` analysis. Optional browser
+capture uses `@playwright/cli` (0.1.23 declares Node >=18); video uses HyperFrames
+(0.8.225 declares Node >=22). Verify installed versions and browser availability.
+MCP integrations are optional and may require authentication. No duplicate global
+MCP registration is needed when the host has loaded the plugin's `.mcp.json`.
 
 ---
 
@@ -128,7 +163,7 @@ Detail: [`skills/design/references/architecture.md`](skills/design/references/ar
 
 ## inspiration_pages — the whole-page reference
 
-`designlib` MCP exposes 405 `inspiration_pages` (sourced from land-book): full-page references with palette / typography / sections / mood / generation_prompt. `/design_page` uses them as the primary seed for new page specs; `/build` then vendors the spec into code. Future: `inspiration_parts` (hero / CTA / paywall / pricing_table) — interface reserved.
+`designlib` MCP exposes `inspiration_pages` (sourced from land-book): full-page references with palette / typography / sections / mood / generation_prompt. `/design_page` uses them as the primary seed for new page specs; `/build` then vendors the spec into code. Future: `inspiration_parts` (hero / CTA / paywall / pricing_table) — interface reserved.
 
 - Schema map: [`skills/design/references/inspiration_pages.md`](skills/design/references/inspiration_pages.md)
 - Resolver contract: [`skills/design/references/layer1-resolvers.md`](skills/design/references/layer1-resolvers.md)
@@ -137,7 +172,7 @@ Detail: [`skills/design/references/architecture.md`](skills/design/references/ar
 
 ## Sub-agent: `design-auditor`
 
-`/review` delegates to `agents/design-auditor.md` — a sub-agent that loads many references (a11y, perf, HIG, motion, AI-slop criteria), greps the project, and returns a structured P0-P3 report. Heavy multi-file reads + structured output → an actual win for context isolation.
+`/review` executes [the shared audit](skills/design/references/audit-workflow.md). Claude can delegate through `agents/design-auditor.md` when permitted; Codex runs the same dimensions and report contract inline.
 
 The audit covers: composition, hierarchy, focal point, rhythm, grid, typography, color, WCAG, motion, **AI-slop detector** (Distinctiveness Gate's 7 questions applied to as-built surfaces), anti-patterns, accessibility. iOS adds Dynamic Type AX5, Reduce Motion, Increase Contrast/Transparency, accessibility labels, HIG checks.
 
@@ -167,10 +202,10 @@ Runtime is `npx @playwright/cli` — no global install, no `npm install` step. T
 
 The Figma MCP (`https://mcp.figma.com/mcp`) ships pre-configured. When connected, the plugin routes Figma URLs:
 
-- `/improve <figma-url>` → reads design context + screenshot, plans fixes (writes back to Figma is deferred to a future version).
+- `/improve <figma-url>` → reads design context + screenshot, applies requested edits when the connected write tool and file permissions allow them; otherwise reports a concrete patch plan.
 - `/review <figma-url>` → uses Figma as the visual source for the audit.
 
-Routing detail: [`skills/design/references/figma/README.md`](skills/design/references/figma/README.md). Requires Figma MCP authenticated (Dev or Full seat for write actions in future versions).
+Routing detail: [`skills/design/references/figma/README.md`](skills/design/references/figma/README.md). Requires authenticated Figma MCP. Writing to canvas is available through `use_figma` for supported clients/plans with edit access; inspect the actual tool schema. See [current Figma write access](https://developers.figma.com/docs/figma-mcp-server/write-to-canvas/) and [rate limits](https://developers.figma.com/docs/figma-mcp-server/rate-limits-access/). Limits govern reads differently from writes; do not assume a fixed monthly quota.
 
 ---
 
@@ -178,15 +213,18 @@ Routing detail: [`skills/design/references/figma/README.md`](skills/design/refer
 
 - `commands/` — 6 user-facing slash commands (+ `start.md` alias for `setup`)
 - `skills/design/SKILL.md` — knowledge base, filters, Layer 1 resolvers
-- `skills/design/references/` — deep documentation (web, iOS, motion, brand, figma, system, design-system, ui-styling, slides)
+- `skills/design/references/` — deep documentation (web, iOS, motion, brand, figma, system, ui-styling, slides)
 - `skills/design/data/` — CSV databases (UX guidelines, tech stacks, anti-patterns)
 - `skills/design/scripts/` — BM25 search (Python), design system generator (Python), anti-pattern detector (Node.js)
-- `skills/design/templates/` — starters (iOS SwiftUI theme, web CSS/Tailwind/shadcn)
+- `skills/design/templates/` — starters (iOS SwiftUI theme, system preview, brand guidelines)
 - `skills/motion/` — sister knowledge skill: web-animation libraries (GSAP/WAAPI/CSS/Anime/Lottie/Three) + HyperFrames short-video pipeline
 - `skills/playwright-cli/` — sister knowledge skill: browser automation for `/review` URL captures and `/improve --restructure` live inspiration_pages
 - `skills/figma-use/` — Figma Plugin API wrapper (mandatory prerequisite for any `use_figma` write)
 - `agents/design-auditor.md` — sole sub-agent (used by `/review`)
+- `skills/design-builder/SKILL.md` — portable task router
 - `.claude-plugin/` — Claude Code manifest + marketplace
+- `.codex-plugin/` and `.agents/plugins/` — Codex manifest + marketplace
+- `references/host-compatibility.md` — shared host adapter
 - `.mcp.json` — `designlib` + `figma` MCP server config
 
 ---
@@ -199,7 +237,7 @@ Pre-configured in `.mcp.json`. To install standalone:
 claude mcp add --transport http designlib https://designlib.app-builders.club/mcp
 ```
 
-Without it, the plugin falls back to local CSV (palettes, styles, fonts) and to landing_patterns (no inspiration_pages). Recommended: keep it on.
+Without it, the plugin uses project tokens, local CSV and platform references. Remote landing patterns, inspiration pages and animation recipes are unavailable; freely generated substitutes are labeled as such. Catalog counts are discovered live.
 
 ---
 
@@ -222,3 +260,14 @@ Built on top of five open-source projects: [Impeccable](https://github.com/pbaka
 ## License
 
 MIT. See [LICENSE](LICENSE).
+## Compatibility and validation
+
+See [host rules](references/host-compatibility.md) for tool discovery, path resolution
+and offline behavior. Validate a checkout with `python3 scripts/validate_plugin.py`
+and `python3 -m unittest discover -s skills/design/scripts -p 'test_*.py'`.
+
+Packaging and runtime guidance checked on 2026-11-01 against
+[Claude plugin reference](https://code.claude.com/docs/en/plugins-reference),
+[Codex plugin packaging](https://developers.openai.com/plugins/build/plugins),
+[Playwright CLI](https://github.com/microsoft/playwright-cli), and
+[HyperFrames](https://github.com/heygen-com/hyperframes).

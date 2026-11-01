@@ -23,7 +23,7 @@ Body:
   - Decorative elements: no minimum
 - **Computed contrast table** (this is the personalized part):
   - For every (palette role × ink token) combination — the role × ink products from `design-system.md ## Palette`.
-  - Compute ratio via `python skills/design/scripts/compute_contrast.py` (one Bash call, JSON pairs in, JSON results out).
+  - Compute ratio via `python3 "$DESIGN_BUILDER_ROOT/skills/design/scripts/compute_contrast.py"` (one Bash call, JSON pairs in, JSON results out).
   - Render as a markdown table: `| Pair | Ratio | Threshold | Pass |`.
   - Mark failing pairs with `❌` and add a row note: `consider <ink-muted-strong> for small text on this surface`.
 - Focus indicators rule: `visible at 3:1 against background, min 2px outline (or platform-equivalent — iOS: native focus ring; web: outline-color from --ring token)`.

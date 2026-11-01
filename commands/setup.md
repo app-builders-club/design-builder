@@ -1,12 +1,13 @@
 ---
 description: Scaffold design/ folder, detect/confirm project stack, run interview, render foundation. Writes design-system.md, style-guide.md, content-library.md, tokens.css, preview.html.
-argument-hint: "[--migrate is NOT a v2.1 flag — fresh setup only]"
-allowed-tools: Read, Glob, Grep, Bash, Write, Edit, mcp__designlib__list_inspiration_pages, mcp__designlib__get_inspiration_page, mcp__designlib__list_inspiration_page_facets, mcp__designlib__list_palettes, mcp__designlib__list_styles, mcp__designlib__list_font_pairs, mcp__designlib__list_domains, mcp__designlib__list_landing_patterns
+argument-hint: "[project brief or existing design context]"
 ---
+
+Read [host compatibility](../references/host-compatibility.md) before executing this workflow.
 
 # /design-builder:setup — establish the design foundation
 
-You are the entry point for a brand-new design project. Activate the `design` skill (`skills/design/SKILL.md`). You produce the artifacts in `design/` that every later command (`/create`, `/improve`, `/review`) relies on. Until you finish, the user has no design system.
+You are the entry point for a brand-new design project. Activate the `design` skill (`skills/design/SKILL.md`). You produce the artifacts in `design/` that every later command (`/design_page`, `/design_screen`, `/build`, `/improve`, `/review`) relies on. Until you finish, the user has no design system.
 
 ## Phase 0 — Scaffold + stack detect (NEW in v2.1)
 
@@ -88,7 +89,7 @@ Three branches based on 0.2:
 - **Empty (no stack):** ask:
   > "No stack detected. What are we building? `Next.js` / `Vite + React` / `SwiftUI` / `Flutter` / `static HTML` / `other` (specify)"
 
-Wait for response. Capture chosen stack into a working variable for 0.4.
+Wait only if a stack choice is still missing. Reuse a specified or clearly detected stack and continue to 0.4.
 
 ### 0.4 — Offer scaffold (only if no project initialized)
 
@@ -111,7 +112,7 @@ Stack → command:
 | Flutter | `flutter create .` |
 | Static HTML | (no scaffold needed — explain that `/build` will write `<name>.html` + `<name>.css` directly) |
 
-**Never run the scaffold command yourself.** Suggest only — destructive in user's repo.
+If the user has requested implementation and scaffolding is needed, inspect the target directory and initialize it when this is safe within that scope. Preserve existing files; use a separate temporary scaffold and merge deliberately when the generator rejects a nonempty directory. Ask only when resolving a real conflict or choosing an unspecified stack. Do not stop at suggesting a command when execution is already authorized.
 
 ### 0.5 — Persist the stack
 
@@ -173,7 +174,7 @@ Show the mapping to the user only if the translation is non-obvious or lossy.
 2. Call `get_design_reference(type='font_pair', filters={industry, mood: <one>}, limit=4)`.
 3. Call `get_design_reference(type='page', filters={page_type='marketing_landing', mood: <one>, style_family: <one or omitted>}, limit=6)` — to ground in real examples. If you want to mix moods, call this 2-3 times with different `mood` values and dedupe by `id`.
 
-**Structural axis (mandatory if user banned typical structure).** If Phase 1 Q7 captured a constraint like "не типичная структура лендинга" / "non-standard layout" / "off-grid" / VARIANCE ≥ 7 in dials, ALSO call `list_inspiration_pages` filtered by `signature` (e.g. `off_grid`, `asymmetric`, `scroll_narrative`, `editorial_layout`) — at least one candidate must be anchored on a structurally distinctive page, not just a visually distinctive one. Otherwise the system you ship will look bold but `/create` will reproduce a classic linear landing on top of it.
+**Structural axis (mandatory if user banned typical structure).** If Phase 1 Q7 captured a constraint like "не типичная структура лендинга" / "non-standard layout" / "off-grid" / VARIANCE ≥ 7 in dials, ALSO call `list_inspiration_pages` filtered by `signature` (e.g. `off_grid`, `asymmetric`, `scroll_narrative`, `editorial_layout`) — at least one candidate must be anchored on a structurally distinctive page, not just a visually distinctive one. Otherwise the system you ship will look bold but `/build` will reproduce a classic linear landing on top of it.
 
 From these, assemble **2-3 direction candidates**. Each candidate combines:
 
@@ -299,7 +300,7 @@ Consult [`skills/design/references/style-guide-template.md`](../skills/design/re
    ```
 4. Invoke via Bash:
    ```bash
-   echo '<json>' | python skills/design/scripts/compute_contrast.py
+   echo '<json>' | python3 "$DESIGN_BUILDER_ROOT/skills/design/scripts/compute_contrast.py"
    ```
 5. Parse the response and render a markdown table in Section 1:
    ```

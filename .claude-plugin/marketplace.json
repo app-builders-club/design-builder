@@ -4,14 +4,14 @@
     "name": "App Builders Club"
   },
   "metadata": {
-    "description": "Design Builder plugin marketplace — 4-command design tooling for Claude Code, with inspiration_pages-driven page generation",
-    "version": "2.1.1"
+    "description": "Universal design tooling for Claude Code and Codex",
+    "version": "2.4.0"
   },
   "plugins": [
     {
       "name": "design-builder",
       "source": "./",
-      "description": "4 commands (/setup, /create, /improve, /review) for web + iOS design. Knowledge-base skill backed by designlib MCP (inspiration_pages, palettes, styles, fonts), iOS HIG refs, designer motion perspectives, anti-pattern detection.",
+      "description": "Design systems, web pages, iOS screens, implementation, improvements and audits for Claude Code and Codex. Shared workflows, local design search, motion, browser capture, DesignLib and Figma.",
       "category": "design",
       "tags": [
         "design-system",

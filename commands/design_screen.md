@@ -1,8 +1,9 @@
 ---
 description: Generate a design spec (markdown) for an app screen (iOS / native). Spec lands in design/screens/<name>.md. No code emitted — use /build for that.
 argument-hint: "[what to design — e.g. 'onboarding', 'home', 'profile', 'paywall']"
-allowed-tools: Read, Glob, Grep, Bash, Write, Edit, mcp__designlib__list_landing_patterns, mcp__designlib__get_landing_pattern, mcp__designlib__list_palettes, mcp__designlib__list_styles, mcp__designlib__list_font_pairs, mcp__designlib__list_animations, mcp__designlib__get_animation, mcp__plugin_design-builder_figma__get_design_context, mcp__plugin_design-builder_figma__get_screenshot
 ---
+
+Read [host compatibility](../references/host-compatibility.md) before executing this workflow.
 
 # /design-builder:design_screen — generate an app screen spec
 

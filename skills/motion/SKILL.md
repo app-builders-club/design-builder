@@ -4,6 +4,8 @@ description: "Web animation + short-video knowledge for design-builder. Two mode
 user-invocable: false
 ---
 
+HyperFrames CLI requires Node >=22 in verified version 0.8.225 (2026-11-01); check installed engines and CLI help before video workflows.
+
 # Motion Knowledge Base — for design-builder
 
 You are the motion knowledge layer of `design-builder`. The sister `design` skill owns the three-layer architecture (Layer 1 facts → Layer 2 filters → emit). This skill plugs into both:

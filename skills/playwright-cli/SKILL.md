@@ -7,6 +7,8 @@ allowed-tools: Bash(playwright-cli:*) Bash(npx:*) Bash(npm:*)
 
 # Browser Automation with playwright-cli
 
+Read [host compatibility](../../references/host-compatibility.md). Prefer a suitable existing host browser tool. For CLI use, choose a unique task session (the `audit` / `inspo` names below are examples), create screenshot output directories first, and close only your session. Do not use close-all against unrelated sessions.
+
 ## How design-builder uses this skill
 
 This skill is consumed by three call sites. In each one, `playwright-cli` is the runtime; the calling command/agent owns the policy.
@@ -58,7 +60,7 @@ Cache only — `design/.cache/` is gitignored. Reuse the cached PNG on subsequen
 
 ### Installation note
 
-`npx @playwright/cli@latest` works without a global install. The first call downloads the package on demand. If users see "playwright-cli command not found", fall back to `npx playwright-cli` everywhere — every example below works with either prefix.
+`npx @playwright/cli@latest` works without a global install. The first call downloads the package on demand. If users see "playwright-cli command not found", fall back to `npx @playwright/cli` everywhere — every example below works with either prefix.
 
 ---
 
@@ -365,13 +367,13 @@ playwright-cli kill-all
 
 ## Installation
 
-If global `playwright-cli` command is not available, try a local version via `npx playwright-cli`:
+If global `playwright-cli` command is not available, try a local version via `npx @playwright/cli`:
 
 ```bash
-npx --no-install playwright-cli --version
+npx --no-install --package @playwright/cli playwright-cli --version
 ```
 
-When local version is available, use `npx playwright-cli` in all commands. Otherwise, install `playwright-cli` as a global command:
+When local version is available, use `npx @playwright/cli` in all commands. Otherwise, install `playwright-cli` as a global command:
 
 ```bash
 npm install -g @playwright/cli@latest

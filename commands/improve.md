@@ -1,8 +1,9 @@
 ---
 description: Improve an existing design — light audit + apply concrete fixes to user code or Figma. Does not write to design/.
 argument-hint: "[target — file path, directory, Figma URL, or 'screenshots'] [--restructure]"
-allowed-tools: Read, Glob, Grep, Bash, Edit, Write, mcp__designlib__list_inspiration_pages, mcp__designlib__get_inspiration_page, mcp__designlib__list_animations, mcp__designlib__get_animation, mcp__plugin_figma_figma__get_design_context, mcp__plugin_figma_figma__get_screenshot, mcp__plugin_figma_figma__get_metadata
 ---
+
+Read [host compatibility](../references/host-compatibility.md) before executing this workflow.
 
 # /design-builder:improve — improve an existing design
 
@@ -59,10 +60,10 @@ Different shape entirely. You're rebuilding one or more weak sections from a fre
 
    ```bash
    mkdir -p design/.cache/inspiration
-   npx playwright-cli -s=inspo open <inspiration_page.url> --browser=chrome
-   npx playwright-cli -s=inspo resize 1440 900
-   npx playwright-cli -s=inspo screenshot --filename=design/.cache/inspiration/<page_id>.png
-   npx playwright-cli -s=inspo close
+   npx @playwright/cli -s=inspo open <inspiration_page.url> --browser=chrome
+   npx @playwright/cli -s=inspo resize 1440 900
+   npx @playwright/cli -s=inspo screenshot --filename=design/.cache/inspiration/<page_id>.png
+   npx @playwright/cli -s=inspo close
    ```
 3. **Constraint check against `design/design-system.md`.** The fresh anchor must respect the system's palette / typography / token rules. If it conflicts (e.g. anchor uses gradients but system bans them), surface the conflict and offer: (a) pick the next anchor, (b) accept the conflict and document, (c) abort the section.
 4. **Plan the rebuild.** State for each target section: old composition → new composition (concrete language: "left-aligned 3-column stats" → "off-grid stats with diagonal connecting hairlines, anchor on `page_xyz`"). NEVER plan as decorative addition to the existing composition — that's the documented v2.0 failure where decorative fragments got glued onto generic sections.
@@ -115,7 +116,7 @@ Wait for confirmation. If user rejects an anchor, offer the next one from the li
 
 For each approved fix:
 - File-based: use `Edit` with exact `old_string` / `new_string`. Confirm read of the file first if not already read.
-- Figma-based: generate a textual patch description (don't write to Figma in v2.0 — that requires `figma-use` skill and explicit user authorisation; future task).
+- Figma-based: load `skills/figma-use/SKILL.md` and inspect the available write tool. Apply changes when the user requested editing that Figma file and access permits it; otherwise produce a concrete patch description with the access limitation.
 
 After each fix is applied, briefly note "✓ <file:line> — <what changed>".
 
@@ -124,16 +125,16 @@ After each fix is applied, briefly note "✓ <file:line> — <what changed>".
 For each approved section:
 - Read the target file fully if not already read.
 - Replace the section's composition with the new one (use `Edit` for surgical replacements; use `Write` only if the entire file is being rewritten).
-- Apply system tokens (no raw hex, no hardcoded font names — same constraints as `/create`).
+- Apply system tokens (no raw hex, no hardcoded font names — same constraints as `/build`).
 - Note "✓ <file> § <section> — rebuilt from anchor <id>".
-- After all sections done, run the layout-distinctiveness check from `/create` Phase 5 step 5 against the modified page. If the page still reads as default linear posture, the rebuild was insufficient — flag it.
+- After all sections done, run the layout-distinctiveness check in `skills/design/references/distinctiveness-gate.md` against the modified page. If the page still reads as default linear posture, the rebuild was insufficient — flag it.
 
 ## Phase 5 — Verify
 
 After all fixes applied:
 - Re-read affected files.
-- Confirm no syntax errors (eyeball; if a build/lint config is present, mention "consider running your linter to verify").
-- Run `node skills/design/scripts/detect-antipatterns.mjs --fast <project_root>` if the file scope is web → confirm the anti-pattern count dropped.
+- Run the project's relevant build, lint or test commands when available. Report actual results and any unavailable checks; do not substitute visual inspection of source for an executed check.
+- Run `node "$DESIGN_BUILDER_ROOT/skills/design/scripts/detect-antipatterns.mjs" --fast <project_root>` if the file scope is web → confirm the anti-pattern count dropped.
 
 ## Phase 6 — Next-step block
 

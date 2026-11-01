@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.4.0 — 2026-11-01
+
+- Added native Codex plugin/marketplace manifests and a portable `design-builder` skill using the existing command recipes. Preserved all Claude commands and its auditor adapter.
+- Shared host rules cover installed resource paths, tool discovery, optional MCP/browser capabilities, inline audits and proportional discovery.
+- Fixed broken skill links and the Playwright npm package invocation. Updated Figma access guidance, catalog snapshot labels and optional runtime requirements.
+- Added cross-host packaging and local runtime validation; shared maintainer instructions now live in AGENTS.md.
+
 ## v2.3.4 — 2026-07-07
 
 ### Changed
